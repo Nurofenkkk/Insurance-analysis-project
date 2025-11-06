@@ -31,3 +31,59 @@ This project focuses on preprocessing, analyzing, and visualizing medical insura
 - Feature engineering and regression modeling
 - Data visualization and storytelling
 - Integration of Python with SQL and BI tools
+
+
+## ⚙️ How to Run
+- Clone the repository:
+  git clone https://github.com/Nurofenkkk/Insurance-analysis-project.git
+  cd Insurance-analysis-project
+
+- Install dependencies:
+  pip install -r requirements.txt
+
+- Run Jupyter Notebook:
+  jupyter notebook p4.ipynb
+
+- Database connection (optional):
+  Update the connection string in the notebook:
+  engine = create_engine("postgresql+psycopg2://<username>:<password>@localhost:5432/<database>")
+  
+- Power BI visualization:
+  Open project1.pbix in Power BI Desktop.
+  Data is already connected (read-only).
+
+## 🖥️ Example Code Snippet
+
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+# Load dataset
+df = pd.read_csv('Medical Costs (pro Aktivitu 4).csv')
+
+# Feature engineering
+df['sex_male'] = (df['sex'] == 'male').astype(int)
+
+def bmi_category(bmi):
+    if pd.isna(bmi):
+        return 'unknown'
+    elif bmi < 18.5:
+        return 'underweight'
+    elif bmi < 25:
+        return 'normalweight'
+    elif bmi < 30:
+        return 'overweight'
+    elif bmi < 35:
+        return 'obesity'
+    else:
+        return 'highobesity'
+
+df['bmi_category'] = df['bmi'].apply(bmi_category)
+
+# Normalization
+df['charges_minmax'] = (df['charges'] - df['charges'].min()) / (df['charges'].max() - df['charges'].min())
+df['charges_zscore'] = (df['charges'] - df['charges'].mean()) / df['charges'].std()
+
+# Impute missing age using regression
+train = df[df['age'].notna()]
+model = LinearRegression().fit(train[['charges']], train['age'])
+df.loc[df['age'].isna(), 'age'] = model.predict(df.loc[df['age'].isna(), ['charges']])
