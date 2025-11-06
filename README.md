@@ -1,6 +1,6 @@
 # 🩺 Medical Cost Analysis Project
 
-**Tools Used:** Python (Pandas, Matplotlib, Scikit-learn), PostgreSQL, Power BI  
+**Tools Used:** Jupyter Notebook, Python (Pandas, Matplotlib, Scikit-learn), PostgreSQL, Power BI  
 **Dataset:** U.S. medical insurance cost data (CSV format)
 
 ## 📌 Project Summary
